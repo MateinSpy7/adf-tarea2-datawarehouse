@@ -1,0 +1,10 @@
+{
+	"name": "adf-ucb-dw-pai-18af",
+	"properties": {
+		"trustModeClaimForMi": {
+			"value": "Enabled",
+			"editable": true
+		}
+	},
+	"location": "southcentralus"
+}
