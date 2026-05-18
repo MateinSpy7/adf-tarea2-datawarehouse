@@ -1,5 +1,5 @@
 {
-	"name": "df_gold_dim_establecimiento",
+	"name": "df_gold_dim_vacuna",
 	"properties": {
 		"folder": {
 			"name": "gold"
@@ -9,7 +9,7 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "silver_establecimientos",
+						"referenceName": "silver_vacunas",
 						"type": "DatasetReference"
 					},
 					"name": "source1"
@@ -18,7 +18,7 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "gold_dim_establecimiento",
+						"referenceName": "gold_dim_vacuna",
 						"type": "DatasetReference"
 					},
 					"name": "sink1"
@@ -27,22 +27,22 @@
 			"transformations": [],
 			"scriptLines": [
 				"source(output(",
-				"          id_establecimiento as string,",
-				"          nombre_establecimiento as string,",
-				"          region_origen as string",
+				"          id_vacuna as string,",
+				"          nombre_vacuna as string,",
+				"          enfermedad_previene as string",
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
-				"     query: 'SELECT DISTINCT \\n    e.id_establecimiento,\\n    e.nombre_establecimiento,\\n    v.region_origen\\nFROM silver.establecimientos e\\nINNER JOIN silver.vacunaciones_consolidadas v \\n    ON e.id_establecimiento = v.id_establecimiento',",
+				"     query: 'SELECT DISTINCT \\n    id_vacuna,\\n    nombre_vacuna,\\n    enfermedad_previene\\nFROM silver.vacunas\\nWHERE id_vacuna IS NOT NULL',",
 				"     format: 'query') ~> source1",
 				"source1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
-				"          establecimiento_key as integer,",
-				"          id_establecimiento as string,",
-				"          nombre_establecimiento as string,",
-				"          region_origen as string",
+				"          vacuna_key as integer,",
+				"          id_vacuna as string,",
+				"          nombre_vacuna as string,",
+				"          enfermedad_previene as string",
 				"     ),",
 				"     deletable:false,",
 				"     insertable:true,",
@@ -53,9 +53,9 @@
 				"     skipDuplicateMapOutputs: true,",
 				"     errorHandlingOption: 'stopOnFirstError',",
 				"     mapColumn(",
-				"          id_establecimiento,",
-				"          nombre_establecimiento,",
-				"          region_origen",
+				"          id_vacuna,",
+				"          nombre_vacuna,",
+				"          enfermedad_previene",
 				"     )) ~> sink1"
 			]
 		}
