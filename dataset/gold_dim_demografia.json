@@ -1,0 +1,29 @@
+{
+	"name": "gold_dim_demografia",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_dw_PAI",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "gold"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "demografia_key",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "grupo_etario",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "gold",
+			"table": "dim_demografia"
+		}
+	}
+}
