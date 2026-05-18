@@ -71,7 +71,8 @@
 				"          nombre_establecimiento,",
 				"          municipio,",
 				"          red_salud,",
-				"          tipo_establecimiento",
+				"          tipo_establecimiento,",
+				"          id_establecimiento = establecimiento_id",
 				"     )) ~> sink1"
 			]
 		}
