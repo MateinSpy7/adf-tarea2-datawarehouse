@@ -1,0 +1,73 @@
+{
+	"name": "df_bronze_vacunas",
+	"properties": {
+		"folder": {
+			"name": "bronze"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "catalogo_vacunas_pai",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "silver_vacunas",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [],
+			"scriptLines": [
+				"source(output(",
+				"          vacuna_id as string,",
+				"          vacuna_nombre as string,",
+				"          enfermedad_previene as string,",
+				"          grupo_pai as string,",
+				"          numero_dosis as short,",
+				"          dosis_descripcion as string,",
+				"          edad_aplicacion_descripcion as string,",
+				"          edad_minima_dias as short,",
+				"          edad_maxima_dias as integer,",
+				"          intervalo_minimo_dias as double,",
+				"          via_administracion as string,",
+				"          sitio_aplicacion as string,",
+				"          dosis_ml as double,",
+				"          condicion_especial as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          id_vacuna as string,",
+				"          nombre_vacuna as string,",
+				"          dosis as string,",
+				"          enfermedad_previene as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          id_vacuna = vacuna_id,",
+				"          nombre_vacuna = vacuna_nombre,",
+				"          dosis = dosis_descripcion,",
+				"          enfermedad_previene",
+				"     )) ~> sink1"
+			]
+		}
+	}
+}
