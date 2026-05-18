@@ -1,0 +1,44 @@
+{
+	"name": "silver_establecimientos",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_dw_PAI",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "silver"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "id_establecimiento",
+				"type": "varchar"
+			},
+			{
+				"name": "nombre_establecimiento",
+				"type": "varchar"
+			},
+			{
+				"name": "id_departamento",
+				"type": "varchar"
+			},
+			{
+				"name": "municipio",
+				"type": "varchar"
+			},
+			{
+				"name": "red_salud",
+				"type": "varchar"
+			},
+			{
+				"name": "tipo_establecimiento",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "silver",
+			"table": "establecimientos"
+		}
+	}
+}

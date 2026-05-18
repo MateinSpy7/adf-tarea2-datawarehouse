@@ -1,0 +1,36 @@
+{
+	"name": "silver_vacunas",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_dw_PAI",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "silver"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "id_vacuna",
+				"type": "varchar"
+			},
+			{
+				"name": "nombre_vacuna",
+				"type": "varchar"
+			},
+			{
+				"name": "dosis",
+				"type": "varchar"
+			},
+			{
+				"name": "enfermedad_previene",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "silver",
+			"table": "vacunas"
+		}
+	}
+}

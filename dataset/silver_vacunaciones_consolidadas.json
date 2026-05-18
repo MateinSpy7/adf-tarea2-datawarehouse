@@ -1,0 +1,55 @@
+{
+	"name": "silver_vacunaciones_consolidadas",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_dw_PAI",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "silver"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "id_registro",
+				"type": "varchar"
+			},
+			{
+				"name": "fecha_vacunacion",
+				"type": "date"
+			},
+			{
+				"name": "id_establecimiento",
+				"type": "varchar"
+			},
+			{
+				"name": "id_vacuna",
+				"type": "varchar"
+			},
+			{
+				"name": "grupo_etario",
+				"type": "varchar"
+			},
+			{
+				"name": "dosis_aplicadas",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "region_origen",
+				"type": "varchar"
+			},
+			{
+				"name": "fecha_carga",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			}
+		],
+		"typeProperties": {
+			"schema": "silver",
+			"table": "vacunaciones_consolidadas"
+		}
+	}
+}
