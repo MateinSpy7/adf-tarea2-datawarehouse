@@ -123,7 +123,7 @@
 						"fileName": "catalogo_establecimientos.csv",
 						"container": "bronze"
 					},
-					"columnDelimiter": ",",
+					"columnDelimiter": ";",
 					"escapeChar": "\\",
 					"firstRowAsHeader": true,
 					"quoteChar": "\""
@@ -159,7 +159,7 @@
 						"fileName": "catalogo_vacunas_pai.csv",
 						"container": "bronze"
 					},
-					"columnDelimiter": ",",
+					"columnDelimiter": ";",
 					"escapeChar": "\\",
 					"firstRowAsHeader": true,
 					"quoteChar": "\""
@@ -804,6 +804,92 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/df_bronze_establecimientos')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "bronze"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "catalogo_establecimientos_csv",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "silver_establecimientos",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "filter1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          establecimiento_id as string,",
+						"          nombre_establecimiento as string,",
+						"          tipo_establecimiento as string,",
+						"          nivel_atencion as short,",
+						"          zona as string,",
+						"          sedes as string,",
+						"          red_salud as string,",
+						"          departamento as string,",
+						"          municipio as string,",
+						"          latitud as string,",
+						"          longitud as string,",
+						"          tiene_cadena_frio as boolean,",
+						"          activo as boolean",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> source1",
+						"source1 filter(not(isNull(establecimiento_id))) ~> filter1",
+						"filter1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          id_establecimiento as string,",
+						"          nombre_establecimiento as string,",
+						"          id_departamento as string,",
+						"          municipio as string,",
+						"          red_salud as string,",
+						"          tipo_establecimiento as string",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          nombre_establecimiento,",
+						"          municipio,",
+						"          red_salud,",
+						"          tipo_establecimiento,",
+						"          id_establecimiento = establecimiento_id",
+						"     )) ~> sink1"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/catalogo_establecimientos_csv')]",
+				"[concat(variables('factoryId'), '/datasets/silver_establecimientos')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/df_bronze_vacunaciones_consolidado')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
@@ -1032,54 +1118,6 @@
 				"[concat(variables('factoryId'), '/datasets/vacunacion_santa_cruz_csv')]",
 				"[concat(variables('factoryId'), '/datasets/vacunacion_rural_movil')]",
 				"[concat(variables('factoryId'), '/datasets/silver_vacunaciones_consolidadas')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/pipeline1_temporal')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Data flow1",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "df_bronze_vacunaciones_consolidado",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"source1": {},
-									"source2": {},
-									"source3": {},
-									"sink1": {}
-								}
-							},
-							"staging": {},
-							"compute": {
-								"coreCount": 8,
-								"computeType": "General"
-							},
-							"traceLevel": "Fine"
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/df_bronze_vacunaciones_consolidado')]"
 			]
 		}
 	]
