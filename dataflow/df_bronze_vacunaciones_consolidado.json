@@ -1,0 +1,223 @@
+{
+	"name": "df_bronze_vacunaciones_consolidado",
+	"properties": {
+		"folder": {
+			"name": "bronze"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "vacunacion_lapaz_csv",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				},
+				{
+					"dataset": {
+						"referenceName": "vacunacion_santa_cruz_csv",
+						"type": "DatasetReference"
+					},
+					"name": "source2"
+				},
+				{
+					"dataset": {
+						"referenceName": "vacunacion_rural_movil",
+						"type": "DatasetReference"
+					},
+					"name": "source3"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "silver_vacunaciones_consolidadas",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "select1"
+				},
+				{
+					"name": "select2"
+				},
+				{
+					"name": "select3"
+				},
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "derivedColumn2"
+				},
+				{
+					"name": "derivedColumn3"
+				},
+				{
+					"name": "union1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          id_registro as string,",
+				"          cod_paciente as string,",
+				"          documento_identidad as string,",
+				"          nombres as string,",
+				"          primer_apellido as string,",
+				"          segundo_apellido as string,",
+				"          genero as string,",
+				"          fec_nacimiento as string,",
+				"          municipio as string,",
+				"          pueblo_indigena as string,",
+				"          fec_vacunacion as string,",
+				"          cod_vacuna as string,",
+				"          desc_vacuna as string,",
+				"          nro_dosis as short,",
+				"          cod_establecimiento as string,",
+				"          desc_establecimiento as string,",
+				"          depto as string,",
+				"          nro_lote as string,",
+				"          temp_conservacion as double,",
+				"          edad_dias as short,",
+				"          via_aplicacion as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source(output(",
+				"          registro_id as string,",
+				"          paciente_id as string,",
+				"          ci_paciente as string,",
+				"          nombre_paciente as string,",
+				"          apellido_paterno as string,",
+				"          apellido_materno as string,",
+				"          sexo as string,",
+				"          fecha_nacimiento as string,",
+				"          municipio_residencia as string,",
+				"          comunidad_indigena as boolean,",
+				"          fecha_vacunacion as string,",
+				"          vacuna_id as string,",
+				"          vacuna_nombre as string,",
+				"          numero_dosis as short,",
+				"          establecimiento_id as string,",
+				"          nombre_establecimiento as string,",
+				"          departamento as string,",
+				"          lote_vacuna as string,",
+				"          temperatura_conservacion as double,",
+				"          edad_dias_aplicacion as short,",
+				"          aplicacion_oportuna as boolean,",
+				"          via_administracion as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source2",
+				"source(output(",
+				"          record_id as string,",
+				"          sync_timestamp as string,",
+				"          device_id as string,",
+				"          patient_id as string,",
+				"          patient_ci as string,",
+				"          patient_name as string,",
+				"          patient_last_name_1 as string,",
+				"          patient_last_name_2 as string,",
+				"          patient_sex as string,",
+				"          patient_birth_date as string,",
+				"          patient_department as string,",
+				"          patient_municipality as string,",
+				"          patient_community as string,",
+				"          patient_indigenous as boolean,",
+				"          vaccination_date as string,",
+				"          vaccine_code as string,",
+				"          vaccine_name as string,",
+				"          dose_number as double,",
+				"          facility_code as string,",
+				"          facility_name as string,",
+				"          lot_number as string,",
+				"          storage_temp_celsius as double,",
+				"          patient_age_days as short,",
+				"          administration_route as string,",
+				"          gps_latitude as string,",
+				"          gps_longitude as string,",
+				"          gps_accuracy_meters as double,",
+				"          observations as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source3",
+				"derivedColumn2 select(mapColumn(",
+				"          id_registro = registro_id,",
+				"          fecha_vacunacion,",
+				"          id_vacuna = vacuna_id,",
+				"          dosis_aplicadas = numero_dosis,",
+				"          id_establecimiento = establecimiento_id,",
+				"          region_origen,",
+				"          grupo_etario",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"derivedColumn1 select(mapColumn(",
+				"          id_registro,",
+				"          fecha_vacunacion = fec_vacunacion,",
+				"          id_vacuna = cod_vacuna,",
+				"          dosis_aplicadas = nro_dosis,",
+				"          id_establecimiento = cod_establecimiento,",
+				"          region_origen,",
+				"          grupo_etario",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select2",
+				"derivedColumn3 select(mapColumn(",
+				"          id_registro = record_id,",
+				"          fecha_vacunacion = vaccination_date,",
+				"          id_vacuna = vaccine_code,",
+				"          dosis_aplicadas = dose_number,",
+				"          id_establecimiento = facility_code,",
+				"          region_origen,",
+				"          grupo_etario = grupo_etiario",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select3",
+				"source1 derive(region_origen = 'La Paz',",
+				"          grupo_etario = 'No registrado') ~> derivedColumn1",
+				"source2 derive(region_origen = 'Santa Cruz',",
+				"          grupo_etario = 'No registrado') ~> derivedColumn2",
+				"source3 derive(region_origen = 'Rural',",
+				"          grupo_etiario = 'No registrado') ~> derivedColumn3",
+				"select2, select1, select3 union(byName: true)~> union1",
+				"union1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          id_registro as string,",
+				"          fecha_vacunacion as date,",
+				"          id_establecimiento as string,",
+				"          id_vacuna as string,",
+				"          grupo_etario as string,",
+				"          dosis_aplicadas as integer,",
+				"          region_origen as string,",
+				"          fecha_carga as timestamp",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          id_registro,",
+				"          fecha_vacunacion,",
+				"          id_establecimiento,",
+				"          id_vacuna,",
+				"          grupo_etario,",
+				"          dosis_aplicadas,",
+				"          region_origen",
+				"     )) ~> sink1"
+			]
+		}
+	}
+}

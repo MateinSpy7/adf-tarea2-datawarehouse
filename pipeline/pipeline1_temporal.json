@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "df_bronze_departamentos",
+						"referenceName": "df_bronze_vacunaciones_consolidado",
 						"type": "DataFlowReference"
 					},
 					"compute": {
