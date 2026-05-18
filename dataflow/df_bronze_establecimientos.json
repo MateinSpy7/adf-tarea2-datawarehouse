@@ -1,0 +1,74 @@
+{
+	"name": "df_bronze_establecimientos",
+	"properties": {
+		"folder": {
+			"name": "bronze"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "catalogo_establecimientos_csv",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "silver_establecimientos",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [],
+			"scriptLines": [
+				"source(output(",
+				"          establecimiento_id as string,",
+				"          nombre_establecimiento as string,",
+				"          tipo_establecimiento as string,",
+				"          nivel_atencion as short,",
+				"          zona as string,",
+				"          sedes as string,",
+				"          red_salud as string,",
+				"          departamento as string,",
+				"          municipio as string,",
+				"          latitud as string,",
+				"          longitud as string,",
+				"          tiene_cadena_frio as boolean,",
+				"          activo as boolean",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          id_establecimiento as string,",
+				"          nombre_establecimiento as string,",
+				"          id_departamento as string,",
+				"          municipio as string,",
+				"          red_salud as string,",
+				"          tipo_establecimiento as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          nombre_establecimiento,",
+				"          municipio,",
+				"          red_salud,",
+				"          tipo_establecimiento",
+				"     )) ~> sink1"
+			]
+		}
+	}
+}

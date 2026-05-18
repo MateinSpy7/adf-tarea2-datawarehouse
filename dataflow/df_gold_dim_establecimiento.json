@@ -1,0 +1,37 @@
+{
+	"name": "df_gold_dim_establecimiento",
+	"properties": {
+		"folder": {
+			"name": "gold"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "silver_vacunaciones_consolidadas",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [],
+			"transformations": [],
+			"scriptLines": [
+				"source(output(",
+				"          id_establecimiento as string,",
+				"          nombre_establecimiento as string,",
+				"          id_departamento as string,",
+				"          municipio as string,",
+				"          red_salud as string,",
+				"          tipo_establecimiento as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     query: 'SELECT * FROM silver.establecimientos',",
+				"     format: 'query') ~> source1"
+			]
+		}
+	}
+}
