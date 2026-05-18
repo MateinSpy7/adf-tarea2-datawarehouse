@@ -1,0 +1,30 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "adf-ucb-dw-pai-18af"
+		},
+		"LS_DataLake_Bronze_PAI_connectionString": {
+			"value": ""
+		},
+		"LS_dw_PAI_password": {
+			"value": ""
+		},
+		"LS_dw_PAI_properties_typeProperties_server": {
+			"value": "sql-ucb-sisger-dwvacunacion-18af.database.windows.net"
+		},
+		"LS_dw_PAI_properties_typeProperties_database": {
+			"value": "dw_vacunacion"
+		},
+		"LS_dw_PAI_properties_typeProperties_userName": {
+			"value": "adminpai"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}
